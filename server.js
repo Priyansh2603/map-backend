@@ -2,11 +2,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const tokml = require('tokml');
-
+const dotenv = require('dotenv');
+const userRoutes = require('./routes/authRoutes');
+const { default: mongoose } = require('mongoose');
+dotenv.config()
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-
+app.use('/api/user',userRoutes);
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error(err));
 app.post('/api/convert-to-kml', (req, res) => {
   const coordinates = req.body.coordinates;
   const geojson = {
