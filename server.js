@@ -4,12 +4,14 @@ const cors = require('cors');
 const tokml = require('tokml');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/authRoutes');
+const fieldRoutes = require('./routes/field');
 const { default: mongoose } = require('mongoose');
 dotenv.config()
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/api/user',userRoutes);
+app.use('/api/fields', fieldRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))

@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   village: String,
   language: String,
   phone: { type: String, unique: true, required: true },
+  fields: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Field' }],
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);
