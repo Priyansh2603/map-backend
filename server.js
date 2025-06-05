@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 const userRoutes = require('./routes/authRoutes');
 const fieldRoutes = require('./routes/field');
 const { default: mongoose } = require('mongoose');
-const fetch = require("node-fetch");
+const { default: axios } = require('axios');
 dotenv.config()
 const app = express();
 app.use(cors());
