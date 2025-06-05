@@ -13,10 +13,16 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/api/user',userRoutes);
 app.use('/api/fields', fieldRoutes);
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error(err));
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('MongoDB connected...');
+  } catch (err) {
+    console.error(err.message);
+    process.exit(1);
+  }
+};
+connectDB();s
 app.use(express.json()); // parse JSON bodies
 
 app.post("/proxy/ndmi", async (req, res) => {
