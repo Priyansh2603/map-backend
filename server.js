@@ -21,17 +21,25 @@ app.use(express.json()); // parse JSON bodies
 
 app.post("/proxy/ndmi", async (req, res) => {
   try {
-    const response = await fetch("https://server.cropgenapp.com/get-vegetation-index", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(req.body)
-    });
+    const response = await axios.post(
+      "https://server.cropgenapp.com/get-vegetation-index",
+      req.body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    const data = await response.json();
-    res.status(response.status).json(data);
+    res.status(response.status).json(response.data);
   } catch (error) {
-    console.error("Proxy Error:", error);
-    res.status(500).json({ error: "Failed to proxy request" });
+    console.error("Proxy Error:", error.message);
+
+    if (error.response) {
+      res.status(error.response.status).json(error.response.data);
+    } else {
+      res.status(500).json({ error: "Proxy failed" });
+    }
   }
 });
 app.post('/api/convert-to-kml', (req, res) => {
