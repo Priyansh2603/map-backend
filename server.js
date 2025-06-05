@@ -61,5 +61,5 @@ app.post('/api/convert-to-kml', (req, res) => {
   const kml = tokml(geojson);
   res.send({ kml });
 });
-console.log(process.env.MONGO_URI)
+console.log("check", process.env.MONGO_URI)
 app.listen(5000, () => console.log('Server running on port 5000'));
