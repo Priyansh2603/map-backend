@@ -10,31 +10,56 @@ const generateToken = (user) => {
 exports.signup = async (req, res) => {
   try {
     const { phone } = req.body;
+
+    if (!phone) {
+      return res.status(400).json({ success: false, message: "Phone number is required." });
+    }
+
     const existing = await User.findOne({ phone });
-    if (existing) return res.status(400).json({ error: "User already exists" });
+    if (existing) {
+      return res.status(400).json({ success: false, message: "Mobile number already registered." });
+    }
 
     const user = new User(req.body);
     await user.save();
 
     const token = generateToken(user);
-    res.json({ token, user });
+    return res.status(201).json({
+      success: true,
+      message: "Signup successful.",
+      token,
+      user
+    });
   } catch (err) {
-    console.log(err)
-
-    res.status(500).json({ error: "Signup failed" });
+    console.error("Signup Error:", err);
+    return res.status(500).json({ success: false, message: "Signup failed. Please try again later." });
   }
 };
+
 
 exports.login = async (req, res) => {
   try {
     const { phone } = req.body;
+
+    if (!phone) {
+      return res.status(400).json({ success: false, message: "Phone number is required." });
+    }
+
     const user = await User.findOne({ phone });
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "Mobile number not registered yet." });
+    }
 
     const token = generateToken(user);
-    res.json({ token, user });
+    return res.status(200).json({
+      success: true,
+      message: "Login successful.",
+      token,
+      user
+    });
   } catch (err) {
-    console.log(err)
-    res.status(500).json({ error: "Login failed" });
+    console.error("Login Error:", err);
+    return res.status(500).json({ success: false, message: "Login failed. Please try again later." });
   }
 };
+
