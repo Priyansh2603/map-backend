@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const userRoutes = require('./routes/authRoutes');
 const fieldRoutes = require('./routes/field');
 const { default: mongoose } = require('mongoose');
+const fetch = require("node-fetch");
 dotenv.config()
 const app = express();
 app.use(cors());
@@ -16,6 +17,23 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
+app.use(express.json()); // parse JSON bodies
+
+app.post("/proxy/ndmi", async (req, res) => {
+  try {
+    const response = await fetch("https://server.cropgenapp.com/get-vegetation-index", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body)
+    });
+
+    const data = await response.json();
+    res.status(response.status).json(data);
+  } catch (error) {
+    console.error("Proxy Error:", error);
+    res.status(500).json({ error: "Failed to proxy request" });
+  }
+});
 app.post('/api/convert-to-kml', (req, res) => {
   const coordinates = req.body.coordinates;
   const geojson = {
