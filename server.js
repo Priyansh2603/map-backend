@@ -22,7 +22,7 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-connectDB();s
+connectDB();
 app.use(express.json()); // parse JSON bodies
 
 app.post("/proxy/ndmi", async (req, res) => {
