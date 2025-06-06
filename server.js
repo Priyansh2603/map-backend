@@ -48,6 +48,24 @@ app.post("/proxy/ndmi", async (req, res) => {
     }
   }
 });
+app.post("/proxy/weather", async (req, res) => {
+  const { lat, lon } = req.body;
+
+  try {
+    const response = await axios.get(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+    );
+
+    res.status(200).json(response.data.current_weather);
+  } catch (error) {
+    console.error("Weather Proxy Error:", error.message);
+    if (error.response) {
+      res.status(error.response.status).json(error.response.data);
+    } else {
+      res.status(500).json({ error: "Weather proxy failed" });
+    }
+  }
+});
 app.post('/api/convert-to-kml', (req, res) => {
   const coordinates = req.body.coordinates;
   const geojson = {
