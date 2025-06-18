@@ -4,9 +4,9 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const generateToken = (user) => {
-  return jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+    return jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+    });
 };
 const generateReqId = () => {
     return crypto.randomBytes(12).toString("hex"); // 24 characters
@@ -73,17 +73,10 @@ exports.verifyOtp = async (req, res) => {
             return res.status(400).json({ success: false, message: "Phone number is required." });
         }
 
-        const user = await User.findOne({ phone });
-        if (!user) {
-            return res.status(404).json({ success: false, message: "Mobile number not registered yet." });
-        }
-const token = generateToken(user);
 
         return res.json({
             success: true,
             message: "Login successful",
-            user,
-            token,
         });
     } catch (error) {
         console.error("VERIFY OTP ERROR:", error.message);
