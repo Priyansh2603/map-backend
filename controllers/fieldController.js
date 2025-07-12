@@ -3,10 +3,10 @@ const User = require("../models/User");
 
 exports.addField = async (req, res) => {
   try {
-    const {  cropType, sowingDate, pumpType, dischargeCapacity,coordinates } = req.body;
+    const {  cropType, sowingDate, pumpType, dischargeCapacity,coordinates, pumpNumber } = req.body;
     const userId = req.user.id;
 
-    const field = new Field({ user: userId, cropType, sowingDate, pumpType, dischargeCapacity,coordinates });
+    const field = new Field({ user: userId, cropType, sowingDate, pumpType, dischargeCapacity,coordinates, pumpNumber });
     await field.save();
 console.log(userId)
     // Update user with the new field reference

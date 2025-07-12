@@ -7,6 +7,7 @@ const fieldSchema = new mongoose.Schema(
     sowingDate: Date,
     pumpType: String,
     dischargeCapacity: Number, // in Liters per Minute
+    pumpNumber: String, // in Liters per Minute
 
     // Add this to store [[[lng, lat], ...]] style coordinates
     coordinates: {
