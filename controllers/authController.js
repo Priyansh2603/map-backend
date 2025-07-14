@@ -3,10 +3,9 @@ const User = require("../models/User");
 
 const generateToken = (user) => {
   return jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
+    expiresIn: "31d",
   });
 };
-
 exports.signup = async (req, res) => {
   try {
     const { phone } = req.body;
