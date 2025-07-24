@@ -50,6 +50,12 @@ exports.login = async (req, res) => {
     }
 
     const token = generateToken(user);
+    console.log({
+      success: true,
+      message: "Login successful.",
+      token,
+      user
+    })
     return res.status(200).json({
       success: true,
       message: "Login successful.",
@@ -62,3 +68,35 @@ exports.login = async (req, res) => {
   }
 };
 
+// async function login (req, res)  {
+//   try {
+//     const { phone } = {phone : "8791152142"};
+
+//     if (!phone) {
+//       console.log({ success: false, message: "Phone number is required." });
+//     }
+
+//     const user = await User.findOne({ phone });
+//     if (!user) {
+//       console.log({ success: false, message: "Mobile number not registered yet." });
+//     }
+
+//     const token = generateToken(user);
+//     console.log({
+//       success: true,
+//       message: "Login successful.",
+//       token,
+//       user
+//     })
+//     // return res.status(200).json({
+//     //   success: true,
+//     //   message: "Login successful.",
+//     //   token,
+//     //   user
+//     // });
+//   } catch (err) {
+//     console.error("Login Error:", err);
+//     // return res.status(500).json({ success: false, message: "Login failed. Please try again later." });
+//   }
+// };
+// login();

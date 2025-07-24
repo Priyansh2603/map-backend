@@ -4,6 +4,7 @@ const fieldSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     cropType: String,
+    cropName: String,
     sowingDate: Date,
     pumpType: String,
     dischargeCapacity: Number, // in Liters per Minute
