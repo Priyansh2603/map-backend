@@ -12,7 +12,7 @@ dotenv.config()
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/api/user',userRoutes);
+app.use('/api/user', userRoutes);
 app.use('/api/fields', fieldRoutes);
 app.use('/api/otp', otpRoutes);
 const connectDB = async () => {
@@ -38,7 +38,6 @@ app.post("/proxy/ndmi", async (req, res) => {
         },
       }
     );
-
     res.status(response.status).json(response.data);
   } catch (error) {
     console.error("Proxy Error:", error.message);
@@ -55,10 +54,23 @@ app.post("/proxy/weather", async (req, res) => {
 
   try {
     const response = await axios.get(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&hourly=relative_humidity_2m&timezone=auto`
     );
+    const { current_weather, hourly, daily } = response.data;
 
-    res.status(200).json(response.data.current_weather);
+    // Get the index of the current hour to match humidity
+    const currentTime = current_weather.time;
+    const currentHumidityIndex = hourly.time.indexOf(currentTime);
+    const currentHumidity =
+      hourly.relative_humidity_2m[currentHumidityIndex] || null;
+
+    res.status(200).json({
+      current: {
+        ...current_weather,
+        humidity: currentHumidity,
+      },
+      daily,
+    });
   } catch (error) {
     console.error("Weather Proxy Error:", error.message);
     if (error.response) {
@@ -68,6 +80,8 @@ app.post("/proxy/weather", async (req, res) => {
     }
   }
 });
+
+
 app.post('/api/convert-to-kml', (req, res) => {
   const coordinates = req.body.coordinates;
   const geojson = {
