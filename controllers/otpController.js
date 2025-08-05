@@ -53,7 +53,7 @@ exports.sendOtp = async (req, res) => {
 // const User = require("../models/User"); // if you have a user model
 
 exports.verifyOtp = async (req, res) => {
-    const { phone, otp } = req.body;
+    const { phone, otp, signup=false } = req.body;
 
     if (!phone || !otp)
         return res.status(400).json({ success: false, message: "Missing phone or otp" });
@@ -75,14 +75,14 @@ exports.verifyOtp = async (req, res) => {
         if (!phone ) {
             return res.status(400).json({ success: false, message: "Phone number is required." });
         }
-        if (!user ) {
+        if (!user && !signup) {
             return res.status(404).json({ success: false, message: "User Not Found!" });
         }
 
 
         return res.json({
             success: true,
-            message: "Login successful",
+            message: signup?"Signup Successfull":"Login successful",
             user,
             token
         });
