@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const fieldSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    ndmi: { type: mongoose.Schema.Types.Mixed, default:null},
+    weather: { type: mongoose.Schema.Types.Mixed, default:null},
     cropType: String,
     cropName: String,
     sowingDate: Date,

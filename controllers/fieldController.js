@@ -17,3 +17,23 @@ console.log(userId)
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.saveField = async (req, res) => {
+  try {
+    const userId = req.user.id; // fixed destructuring
+    const { id } = req.params;
+console.log(req.body)
+    const updatedField = await Field.findByIdAndUpdate(id, req.body, {
+      new: true, // return the updated document
+      runValidators: true, // ensure validation rules are enforced
+    });
+
+    if (!updatedField) {
+      return res.status(404).json({ message: "Field not found" });
+    }
+
+    res.status(200).json({ message: "Field updated successfully", field: updatedField });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
