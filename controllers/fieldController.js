@@ -8,7 +8,7 @@ exports.addField = async (req, res) => {
 
     const field = new Field({ user: userId, cropType, sowingDate, cropName, pumpType, dischargeCapacity,coordinates, pumpNumber });
     await field.save();
-console.log(userId)
+// console.log(userId)
     // Update user with the new field reference
     await User.findByIdAndUpdate(userId, { $push: { fields: field._id } });
 
@@ -22,7 +22,7 @@ exports.saveField = async (req, res) => {
   try {
     const userId = req.user.id; // fixed destructuring
     const { id } = req.params;
-console.log(req.body)
+// console.log(req.body)
     const updatedField = await Field.findByIdAndUpdate(id, req.body, {
       new: true, // return the updated document
       runValidators: true, // ensure validation rules are enforced
